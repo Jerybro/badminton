@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/badminton/static/css/main.b4cd3d13.css",
+    "main.js": "/badminton/static/js/main.68f35431.js",
+    "index.html": "/badminton/index.html",
+    "main.b4cd3d13.css.map": "/badminton/static/css/main.b4cd3d13.css.map",
+    "main.68f35431.js.map": "/badminton/static/js/main.68f35431.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b4cd3d13.css",
+    "static/js/main.68f35431.js"
+  ]
+}
