@@ -54,10 +54,20 @@
 
       // 按顺序加载依赖
       console.log('开始加载 React 依赖...');
-      Promise.all([
-        loadScript('https://unpkg.com/react@18/umd/react.production.min.js'),
-        loadScript('https://unpkg.com/react-dom@18/umd/react-dom.production.min.js')
-      ])
+      
+      // 先加载 React
+      loadScript('https://unpkg.com/react@18/umd/react.production.min.js')
+        .then(() => {
+          console.log('React 加载完成，开始加载 ReactDOM...');
+          // 等待一小段时间确保 React 完全初始化
+          return new Promise(resolve => setTimeout(resolve, 100));
+        })
+        .then(() => loadScript('https://unpkg.com/react-dom@18/umd/react-dom.production.min.js'))
+        .then(() => {
+          console.log('ReactDOM 加载完成，等待初始化...');
+          // 等待一小段时间确保 ReactDOM 完全初始化
+          return new Promise(resolve => setTimeout(resolve, 100));
+        })
         .then(() => {
           console.log('React 依赖加载完成，开始加载主应用...');
           return fetch('/badminton/asset-manifest.json');
