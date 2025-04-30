@@ -8,9 +8,74 @@
     <meta name="description" content="羽球场地排队系统" />
     <link rel="manifest" href="/badminton/manifest.json" />
     <title>羽球排队</title>
+    <style>
+      /* 添加调试样式 */
+      #root {
+        border: 2px solid red;
+        min-height: 100vh;
+      }
+    </style>
   </head>
   <body>
     <noscript>您需要启用 JavaScript 才能运行此应用。</noscript>
     <div id="root"></div>
+    <script>
+      // 调试函数
+      function checkElementVisibility(element) {
+        const style = window.getComputedStyle(element);
+        console.log('元素可见性检查:', {
+          display: style.display,
+          visibility: style.visibility,
+          opacity: style.opacity,
+          position: style.position,
+          height: element.offsetHeight,
+          width: element.offsetWidth,
+          isVisible: element.offsetParent !== null
+        });
+      }
+
+      // 检查 root 元素
+      function checkRootElement() {
+        const root = document.getElementById('root');
+        console.log('Root 元素检查:', {
+          exists: !!root,
+          childNodes: root.childNodes.length,
+          innerHTML: root.innerHTML
+        });
+        checkElementVisibility(root);
+      }
+
+      // 定期检查
+      setInterval(checkRootElement, 1000);
+
+      // 监听 React 挂载
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList') {
+            console.log('DOM 变化:', {
+              addedNodes: mutation.addedNodes.length,
+              removedNodes: mutation.removedNodes.length,
+              target: mutation.target.id
+            });
+            checkRootElement();
+          }
+        });
+      });
+
+      // 开始观察
+      observer.observe(document.getElementById('root'), {
+        childList: true,
+        subtree: true
+      });
+
+      // 检查 React 是否加载
+      window.addEventListener('load', () => {
+        console.log('页面加载完成，检查 React:', {
+          React: typeof window.React !== 'undefined',
+          ReactDOM: typeof window.ReactDOM !== 'undefined'
+        });
+        checkRootElement();
+      });
+    </script>
   </body>
 </html> 
