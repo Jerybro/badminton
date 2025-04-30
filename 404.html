@@ -34,7 +34,7 @@
           console.error('加载 CSS 失败:', error);
         });
 
-      // 动态加载 React
+      // 动态加载脚本
       const loadScript = (src) => {
         console.log('开始加载脚本:', src);
         return new Promise((resolve, reject) => {
@@ -69,6 +69,14 @@
         })
         .then(() => {
           console.log('应用加载完成！');
+          // 确保 React 和 ReactDOM 已经加载
+          if (window.React && window.ReactDOM) {
+            console.log('React 和 ReactDOM 已就绪');
+            // 触发一个自定义事件，通知主应用代码可以初始化
+            window.dispatchEvent(new Event('react-ready'));
+          } else {
+            console.error('React 或 ReactDOM 未加载');
+          }
         })
         .catch(error => {
           console.error('应用加载过程中出错:', error);
