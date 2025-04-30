@@ -45,8 +45,23 @@
         checkElementVisibility(root);
       }
 
+      // 检查 React 状态
+      function checkReactState() {
+        console.log('React 状态检查:', {
+          React: typeof window.React !== 'undefined',
+          ReactDOM: typeof window.ReactDOM !== 'undefined',
+          ReactVersion: window.React?.version,
+          ReactDOMVersion: window.ReactDOM?.version,
+          rootElement: document.getElementById('root'),
+          scripts: Array.from(document.scripts).map(s => s.src)
+        });
+      }
+
       // 定期检查
-      setInterval(checkRootElement, 1000);
+      setInterval(() => {
+        checkRootElement();
+        checkReactState();
+      }, 1000);
 
       // 监听 React 挂载
       const observer = new MutationObserver((mutations) => {
@@ -58,6 +73,7 @@
               target: mutation.target.id
             });
             checkRootElement();
+            checkReactState();
           }
         });
       });
@@ -70,11 +86,34 @@
 
       // 检查 React 是否加载
       window.addEventListener('load', () => {
-        console.log('页面加载完成，检查 React:', {
-          React: typeof window.React !== 'undefined',
-          ReactDOM: typeof window.ReactDOM !== 'undefined'
-        });
+        console.log('页面加载完成，开始检查...');
         checkRootElement();
+        checkReactState();
+
+        // 检查所有脚本是否加载
+        const scripts = Array.from(document.scripts);
+        console.log('已加载的脚本:', scripts.map(s => s.src));
+
+        // 检查 asset-manifest.json
+        fetch('/badminton/asset-manifest.json')
+          .then(response => response.json())
+          .then(data => {
+            console.log('asset-manifest.json 内容:', data);
+          })
+          .catch(error => {
+            console.error('加载 asset-manifest.json 失败:', error);
+          });
+      });
+
+      // 捕获全局错误
+      window.addEventListener('error', (event) => {
+        console.error('全局错误:', {
+          message: event.message,
+          filename: event.filename,
+          lineno: event.lineno,
+          colno: event.colno,
+          error: event.error
+        });
       });
     </script>
   </body>
